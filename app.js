@@ -1,11 +1,26 @@
 // Capture the form
 const form = document.getElementById('loan-form');
 
+// Variables for the Loader To Be Functional
+const loader = document.getElementById('loading');
+const results = document.getElementById('results');
+
 // Eventlistener for the form captured
-form.addEventListener('submit', calcResults);
+form.addEventListener('submit', e => {
+  // Set the loader to run once the submit button is clicked
+  loader.style.display = 'block';
+
+  // Here, we hide the results
+  results.style.display = 'none';
+
+  // Set a timeout for the loader
+  setTimeout(calcResults, 1500);
+
+  e.preventDefault();
+});
 
 // Calculate Results
-function calcResults(e) {
+function calcResults() {
   // UI Variables
 
   // Fields before Submit Button
@@ -37,15 +52,18 @@ function calcResults(e) {
     monthlyPayment.value = monthly.toFixed(2);
     totalPayment.value = (monthly * calculatedPayments).toFixed(2);
     totalInterest.value = (monthly * calculatedPayments - principal).toFixed(2);
+    loader.style.display = 'none';
+    results.style.display = 'block';
   } else {
     showError('Please check your numbers');
   }
-
-  e.preventDefault();
 }
 
 // Show Error Function
 function showError(error) {
+  loader.style.display = 'none';
+  results.style.display = 'none';
+
   // Create a div
   const errorDiv = document.createElement('div');
 
@@ -54,7 +72,7 @@ function showError(error) {
 
   // Append a text node to the errorDiv element
   errorDiv.appendChild(document.createTextNode(error));
-  console.log(errorDiv);
+  // console.log(errorDiv);
 
   // Ideally, we need to display the error on the DOM
   // To do this, we need to get some parts of the DOM
